@@ -19,6 +19,3 @@ vector<int> rightView(TreeNode *root)
     solve(root, ans, 0);
     return ans;
 }
-int main()
-{
-}
