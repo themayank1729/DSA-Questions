@@ -1,0 +1,68 @@
+#include <bits/stdc++.h>
+#include "TreeCreation.cpp"
+Node *solve(vector<int> &inOrder, vector<int> &postOrder, int inStart, int inEnd, int postStart, int postEnd)
+{
+    if (inStart > inEnd)
+        return NULL;
+    TreeNode *root = new TreeNode(postOrder[postEnd]);
+    int i = inStart;
+    for (; i <= inEnd; i++)
+    {
+        if (inOrder[i] == root->data)
+            break;
+    }
+    int leftSize = i - inStart;
+    int rightSize = inEnd - i;
+    root->left = solve(inOrder, postOrder, inStart, i - 1, postStart, postStart + leftSize - 1);
+    root->right = solve(inOrder, postOrder, i + 1, inEnd, postEnd - rightSize, postEnd - 1);
+    return root;
+}
+
+// Time Complexity  - O(n*n) in worst case
+// SC - O ( 1 )
+
+Node *buildTree(vector<int> postOrder, vector<int> inOrder)
+{
+    int n = postOrder.size();
+    int inStart = 0;
+    int inEnd = n - 1;
+    int postStart = 0;
+    int postEnd = n - 1;
+    return solve(inOrder, postOrder, inStart, inEnd, postStart, postEnd);
+}
+
+//***************************************************************************************************************************** */
+// Optimal Approach
+
+// Time Complexity  - O(n) in worst case
+// Space Complexity  - O ( n ) map
+
+Node *solve(vector<int> &inOrder, vector<int> &postOrder,
+            unordered_map<int, int> &inMap,
+            int inStart, int inEnd, int &postIndex)
+{
+    if (inStart > inEnd)
+        return NULL;
+
+    Node *root = new Node(postOrder[postIndex--]);
+
+    int inIndex = inMap[root->data];
+
+    root->right = solve(inOrder, postOrder, inMap, inIndex + 1, inEnd, postIndex);
+    root->left = solve(inOrder, postOrder, inMap, inStart, inIndex - 1, postIndex);
+
+    return root;
+}
+
+Node *buildTree(vector<int> inOrder, vector<int> postOrder)
+{
+    int n = postOrder.size();
+    unordered_map<int, int> inMap;
+    for (int i = 0; i < n; i++)
+    {
+        inMap[inOrder[i]] = i;
+    }
+
+    int postIndex = n - 1;
+    return solve(inOrder, postOrder, inMap, 0, n - 1, postIndex);
+}
