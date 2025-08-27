@@ -2,6 +2,7 @@
 #include "TreeCreation.cpp"
 
 TreeNode *prev = NULL;
+
 void flatten(TreeNode *root) // normal recursion
 {
     if (root == NULL)
