@@ -61,13 +61,14 @@ public:
             size[ulp_u] += size[ulp_v];
         }
         else
-
-
+        {
             parent[ulp_v] = ulp_u;
             size[ulp_u] = size[ulp_u] + size[ulp_v];
         }
     }
 };
+
+
 int main() {
     DisjointSet ds(7);
     ds.unionByRank(1, 2);
